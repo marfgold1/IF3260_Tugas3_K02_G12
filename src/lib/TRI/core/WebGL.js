@@ -233,7 +233,12 @@ export class WebGL extends EventDispatcher {
         return null;
     }
 
-    #createMaterial(material) {
+    /**
+     * Create material to use.
+     * @param {ShaderMaterial} material Material to create.
+     * @returns {ProgramInfo}
+     */
+    #createOrGetMaterial(material) {
         if (material instanceof ShaderMaterial) {
             const progId = material.id;
             if (!(progId in this.#shaderCache)) {
@@ -283,7 +288,7 @@ export class WebGL extends EventDispatcher {
             /** @type {ShaderMaterial} */
             const material = object.material;
             /** @type {ProgramInfo} */
-            const info = this.#createMaterial(material);
+            const info = this.#createOrGetMaterial(material);
             this.#setProgramInfo(info);
             this.#setAttribs(object.geometry.attributes);
             this.#setUniforms({

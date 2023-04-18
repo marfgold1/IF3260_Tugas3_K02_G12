@@ -39,6 +39,10 @@ export class PhongMaterial extends ShaderMaterial {
         this.#lightPosition = this.uniforms['lightPosition'];
     }
 
+    get id() {
+        return "Phong";
+    }
+
     get ambientColor() {
         return this.#ambientColor;
     }

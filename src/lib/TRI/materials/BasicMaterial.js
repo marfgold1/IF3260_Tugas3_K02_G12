@@ -25,6 +25,10 @@ export class BasicMaterial extends ShaderMaterial {
         this.#color = this.uniforms['color'];
     }
 
+    get id() {
+        return "Basic";
+    }
+
     get color() {
         return this.#color;
     }
