@@ -1,4 +1,5 @@
 import { InspectorSection, state } from "../../lib/Inspector.js";
+import { DEG2RAD } from "../../lib/TRI/math/index.js";
 
 
 const componentController = new InspectorSection("componentController", "Component Controller", {
@@ -7,7 +8,7 @@ const componentController = new InspectorSection("componentController", "Compone
         app.rig.position[i] = v;
     }, {}),
     rotation: state.vector3("Rotation", (i, v) => {
-        app.rig.rotation[i] = v;
+        app.rig.rotation[i] = v * DEG2RAD;
     }, {}, {step: 0.05}),
     scale: state.vector3("Scale", (i, v) => {
         app.rig.scale[i] = v;
