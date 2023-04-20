@@ -45,6 +45,7 @@ globalThis.app = {
     cameras,
     model,
     curFrame: 0,
+    scene,
     animation,
     camera,
     rig: null,
