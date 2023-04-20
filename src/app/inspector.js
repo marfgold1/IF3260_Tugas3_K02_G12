@@ -8,4 +8,5 @@ globalThis.inspector = inspector;
 globalThis.inspectorItems = inspectorItems;
 
 Object.keys(inspectorItems).forEach((v) => { inspector.register(inspectorItems[v]); });
-inspector.show("scene", "animation", "phongMat", "light", "camera", "model");
+// inspector.show("scene", "animation", "phongMat", "light", "camera", "model", "componentTree");
+inspector.show("componentTree", "componentController");

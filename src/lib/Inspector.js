@@ -189,6 +189,9 @@ export class InspectorSection {
         if (options.label || (type !== "submit" && options.label == null))
             t.appendChild(createEl(`<label for="${id}">${state.title || child}</label>`));
         
+        
+        t.style = state.style || "";
+        
         function getValue(e) {
             const value = e.target.value;
             return ["number", "range"].indexOf(type) === 1 ? parseFloat(value) : value;
@@ -217,7 +220,7 @@ export class InspectorSection {
         };
         const inputCreator = {
             general: () => listenInput(assignAttributes(createEl(`
-                <input type="${type}" id="${id}" value="${state.value}" ${state.value === true ? "checked":""} />
+                <input type="${type}" id="${id}" value="${state.value}" ${state.value === true ? "checked":""} style="${state.style || ""}" />
             `))),
             select: () => listenInput(assignAttributes(createEl(`
                 <select id="${id}">
@@ -252,6 +255,21 @@ export class InspectorSection {
                 });
                 return inp;
             },
+            slider: () => {
+                const inp = assignAttributes(createEl(`
+                    <div class="insp-slider" style="display: flex; align-items: center;">
+                        <p>${state.value}</p>
+                        <input type="range" id="${id}" value="${state.value}" min="${options.min}" max="${options.max}" step="${options.step}" />
+                    </div>
+                `));
+                inp.addEventListener("input", (e) => {
+                    const val = getValue(e);
+                    if (Number.isNaN(val)) return;
+                    d[child] = val;
+                    this.setState(sd);
+                });
+                return inp;
+            }
         }
         const inp = inputCreator[type in inputCreator ? type:"general"]();
         t.appendChild(inp);
@@ -311,12 +329,13 @@ export class Inspector {
 }
 
 export const state = {
-    input: (value, type="number", onChange=null, options={}) => {
+    input: (value, type="number", onChange=null, options={}, style="") => {
         return {
             value,
             type,
             onChange,
             options,
+            style,
         }
     },
     group: (title, value) => {
@@ -325,9 +344,10 @@ export const state = {
             title,
         }
     },
-    button: (title=null, onClick=null) => {
+    button: (title=null, onClick=null, style="") => {
+        console.log("button", title, style);
         return {
-            ...state.input(null, "submit", onClick),
+            ...state.input(null, "submit", onClick, {}, style),
             title,
         }
     },
@@ -364,5 +384,8 @@ export const state = {
     },
     toggle: (value, onChange=null, options={}) => {
         return state.input(value, "checkbox", onChange, options);
+    },
+    slider: (value, onChange=null, options={}) => {
+        return state.input(value, "slider", onChange, options);
     },
 }
