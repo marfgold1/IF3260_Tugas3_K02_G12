@@ -27,6 +27,9 @@ const animation = new InspectorSection("animation", "Animation", {
         app.animation.isPlaying = !app.animation.isPlaying;
     }),
     speed: state.range(0.2, null, { min: 0.1, max: 2, step: 0.1 }),
+    reverse: state.toggle(false, () => {
+        app.animation.isReverse = !app.animation.isReverse;
+    })
 });
 
 export default {

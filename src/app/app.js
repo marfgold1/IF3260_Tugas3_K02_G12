@@ -38,6 +38,7 @@ scene.add(model);
 const anim = inspectorItems.animation.state;
 const animation = {
     isPlaying: false,
+    isReverse: false,
 }
 
 const controls = {
@@ -127,11 +128,12 @@ function render(ts) {
     dt = (ts - lt) / tf;
     lt = ts;
     if (animation.isPlaying) {
-        model.rotation.set(
-            (model.rotation.x + dt * TRI.DEG2RAD * anim.speed) % 360,
-            (model.rotation.y + dt * TRI.DEG2RAD * anim.speed) % 360,
-            model.rotation.z
-        );
+        if (!app.animation.isReverse){
+            // Frame 9 -> 8 -> 7 -> ... -> 0
+        } else {
+            // Frame 0 -> 1 -> 2 -> 3 -> 4 -> ... -> 9
+        }
+
     }
     requestAnimationFrame(render);
 }
