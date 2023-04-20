@@ -9,7 +9,9 @@ const modelImport = new InspectorSection("import", "Import", {
     import: state.button("Import", (v) => {
         const file = modelImport.state.file;
         const data = JSON.parse(file);
+        app.model.removeFromParent();
         app.model = TRI.DeserializeObject(data);
+        app.scene.add(app.model);
         ComponentTree.update(app.model.rigsTree);
         app.updateRig();
     }),

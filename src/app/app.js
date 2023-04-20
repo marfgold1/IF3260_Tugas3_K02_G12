@@ -42,6 +42,7 @@ const controls = {
 globalThis.app = {
     cameras,
     model,
+    scene,
     animation,
     camera,
     rig: null,
