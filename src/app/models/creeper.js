@@ -19,7 +19,7 @@ export default {
                     },
                 },
             },
-            RLegFR: {
+            RLegFL: {
                 options: {
                     position: [0.25, 0, -0.25],
                 },
@@ -32,7 +32,7 @@ export default {
                     },
                 },
             },
-            RLegFL: {
+            RLegFR: {
                 options: {
                     position: [0.25, 0, 0.25],
                 },
@@ -45,7 +45,7 @@ export default {
                     },
                 },
             },
-            RLegBR: {
+            RLegBL: {
                 options: {
                     position: [-0.25, 0, -0.25],
                 },
@@ -58,7 +58,7 @@ export default {
                     },
                 },
             },
-            RLegBL: {
+            RLegBR: {
                 options: {
                     position: [-0.25, 0, 0.25],
                 },

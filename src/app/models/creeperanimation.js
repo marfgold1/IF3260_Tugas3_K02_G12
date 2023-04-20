@@ -3,207 +3,318 @@ export default {
     frames: [
         // 0
         {
+            RBody: {
+                position: [0,0,0],
+                rotation: [0,0,0],
+            },
+            RHead: {
+                position: [0, 2, 0],
+                rotation: [0, 5, 0],
+            },
             RLegFR: {
-                rotation: [0, 0, 0.0872665],
+                position: [0.25, 0, -0.25],
+                rotation: [0, 0, 5],
             },
             RLegFL: {
-                rotation: [0, 0, -0.0872665],
+                position: [0.25, 0, 0.25],
+                rotation: [0, 0, -5],
             },
             RLegBR: {
-                rotation: [0, 0, -0.0872665],
+                position: [-0.25, 0, -0.25],
+                rotation: [0, 0, -5],
             },
             RLegBL: {
-                rotation: [0, 0, 0.0872665],
+                position: [-0.25, 0, 0.25],
+                rotation: [0, 0, 5],
             },
         },
         // 1
         {
-            Rbody: {
-                position: [0.5,0,0],
+            RBody: {
+                position: [0.2,0,0],
+                rotation: [0, 5, 0],
             },
             RHead: {
-                rotation: [0, 0.0872665, 0],
+                position: [0, 2, 0],
+                rotation: [0, 5, 0],
+                
             },
             RLegFR: {
-                rotation: [0, 0, 0.174533],
+                position: [0.25, 0, -0.25],
+                rotation: [0, 0, 10],
+                
             },
             RLegFL: {
-                rotation: [0, 0, -0.174533],
+                position: [0.25, 0, 0.25],
+                rotation: [0, 0, -10],
+                
             },
             RLegBR: {
-                rotation: [0, 0, -0.174533],
+                position: [-0.25, 0, -0.25],
+                rotation: [0, 0, -10],
+                
             },
             RLegBL: {
-                rotation: [0, 0, 0.174533],
+                position: [-0.25, 0, 0.25],
+                rotation: [0, 0, 10],
+                
             },
         },
         // 2
         {
-            Rbody: {
-                position: [1,0,0],
+            RBody: {
+                position: [0.4,0,0],
+                rotation: [0,0,0],
             },
             RHead: {
-                rotation: [0, 0.174533, 0],
+                position: [0, 2, 0],
+                rotation: [0, 10, 0],
+
             },
             RLegFR: {
-                rotation: [0, 0, 0.261799],
+                position: [0.25, 0, -0.25],
+                rotation: [0, 0, 15],
+                
             },
             RLegFL: {
-                rotation: [0, 0, -0.261799],
+                position: [0.25, 0, 0.25],
+                rotation: [0, 0, -15],
+                
             },
             RLegBR: {
-                rotation: [0, 0, -0.261799],
+                position: [-0.25, 0, -0.25],
+                rotation: [0, 0, -15],
+                
             },
             RLegBL: {
-                rotation: [0, 0, 0.261799],
+                position: [-0.25, 0, 0.25],
+                rotation: [0, 0, 15],
+                
             },
         },
         // 3
         {
-            Rbody: {
-                position: [1.5,0,0],
+            RBody: {
+                position: [0.6,0,0],
+                rotation: [0,0,0],
             },
             RHead: {
-                rotation: [0, 0.261799, 0],
+                position: [0, 2, 0],
+                rotation: [0, 15, 0],
+                
             },
             RLegFR: {
-                rotation: [0, 0, 0.174533],
+                position: [0.25, 0, -0.25],
+                rotation: [0, 0, 10],
+                
             },
             RLegFL: {
-                rotation: [0, 0, -0.174533],
+                position: [0.25, 0, 0.25],
+                rotation: [0, 0, -10],
+                
             },
             RLegBR: {
-                rotation: [0, 0, -0.174533],
+                position: [-0.25, 0, -0.25],
+                rotation: [0, 0, -10],
+                
             },
             RLegBL: {
-                rotation: [0, 0, 0.174533],
+                position: [-0.25, 0, 0.25],
+                rotation: [0, 0, 10],
+                
             },
         },
         // 4
         {
-            Rbody: {
-                position: [2,0,0],
+            RBody: {
+                position: [0.8,0,0],
+                rotation: [0,0,0],
             },
             RHead: {
-                rotation: [0, 0.174533, 0],
+                position: [0, 2, 0],
+                rotation: [0, 10, 0],
+                
             },
             RLegFR: {
-                rotation: [0, 0, 0.0872665],
+                position: [0.25, 0, -0.25],
+                rotation: [0, 0, 5],
+                
             },
             RLegFL: {
-                rotation: [0, 0, -0.0872665],
+                position: [0.25, 0, 0.25],
+                rotation: [0, 0, -5],
+                
             },
             RLegBR: {
-                rotation: [0, 0, -0.0872665],
+                position: [-0.25, 0, -0.25],
+                rotation: [0, 0, -5],
+                
             },
             RLegBL: {
-                rotation: [0, 0, 0.0872665],
+                position: [-0.25, 0, 0.25],
+                rotation: [0, 0, 5],
+                
             },
         },
         // 5
         {
-            Rbody: {
-                position: [2.5,0,0],
+            RBody: {
+                position: [1,0,0],
+                rotation: [0,0,0],
             },
             RHead: {
+                position: [0, 2, 0],
                 rotation: [0, 5, 0],
+                
             },
             RLegFR: {
-                rotation: [0, 0, 0.174533],
+                position: [0.25, 0, -0.25],
+                rotation: [0, 0, 0],
+                
             },
             RLegFL: {
-                rotation: [0, 0, -0.174533],
+                position: [0.25, 0, 0.25],
+                rotation: [0, 0, 0],
+                
             },
             RLegBR: {
-                rotation: [0, 0, -0.174533],
+                position: [-0.25, 0, -0.25],
+                rotation: [0, 0, 0],
+                
             },
             RLegBL: {
-                rotation: [0, 0, 0.174533],
+                position: [-0.25, 0, 0.25],
+                rotation: [0, 0, 0],
+                
             },
         },
         // 6
         {
-            Rbody: {
-                position: [3,0,0],
+            RBody: {
+                position: [1.2,0,0],
+                rotation: [0,0,0],
             },
             RHead: {
+                position: [0, 2, 0],
                 rotation: [0, 0, 0],
+                
             },
             RLegFR: {
-                rotation: [0, 0, 0.261799],
+                position: [0.25, 0, -0.25],
+                rotation: [0, 0, -5],
+                
             },
             RLegFL: {
-                rotation: [0, 0, -0.261799],
+                position: [0.25, 0, 0.25],
+                rotation: [0, 0, 5],
+                
             },
             RLegBR: {
-                rotation: [0, 0, -0.261799],
+                position: [-0.25, 0, -0.25],
+                rotation: [0, 0, 5],
+                
             },
             RLegBL: {
-                rotation: [0, 0, 0.261799],
+                position: [-0.25, 0, 0.25],
+                rotation: [0, 0, -5],
+                
             },
         },
         // 7
         {
-            Rbody: {
-                position: [3.5,0,0],
+            RBody: {
+                position: [1.4,0,0],
+                rotation: [0,0,0],
             },
             RHead: {
+                position: [0, 2, 0],
                 rotation: [0, -5, 0],
+                
             },
             RLegFR: {
-                rotation: [0, 0, 0.174533],
+                position: [0.25, 0, -0.25],
+                rotation: [0, 0, -10],
+                
             },
             RLegFL: {
-                rotation: [0, 0, -0.174533],
+                position: [0.25, 0, 0.25],
+                rotation: [0, 0, 10],
+                
             },
             RLegBR: {
-                rotation: [0, 0, -0.174533],
+                position: [-0.25, 0, -0.25],
+                rotation: [0, 0, 10],
+                
             },
             RLegBL: {
-                rotation: [0, 0, 0.174533],
+                position: [-0.25, 0, 0.25],
+                rotation: [0, 0, -10],
+                
             },
         },
         // 8
         {
-            Rbody: {
-                position: [4,0,0],
+            RBody: {
+                position: [1.6,0,0],
+                rotation: [0,0,0],
             },
             RHead: {
-                rotation: [0, -0.174533, 0],
+                position: [0, 2, 0],
+                rotation: [0, -10, 0],
+                
             },
             RLegFR: {
-                rotation: [0, 0, 0.0872665],
+                position: [0.25, 0, -0.25],
+                rotation: [0, 0, -15],
+                
             },
             RLegFL: {
-                rotation: [0, 0, -0.0872665],
+                position: [0.25, 0, 0.25],
+                rotation: [0, 0, 15],
+                
             },
             RLegBR: {
-                rotation: [0, 0, -0.0872665],
+                position: [-0.25, 0, -0.25],
+                rotation: [0, 0, 15],
+                
             },
             RLegBL: {
-                rotation: [0, 0, 0.0872665],
+                position: [-0.25, 0, 0.25],
+                rotation: [0, 0, -15],
+                
             },
         },
         // 9
         {
-            Rbody: {
-                position: [4.5,0,0],
+            RBody: {
+                position: [1.8,0,0],
+                rotation: [0,0,0],
             },
             RHead: {
-                rotation: [0, -0.261799, 0],
+                position: [0, 2, 0],
+                rotation: [0, -15, 0],
+                
             },
             RLegFR: {
-                rotation: [0, 0, 0.174533],
+                position: [0.25, 0, -0.25],
+                rotation: [0, 0, -10],
+                
             },
             RLegFL: {
-                rotation: [0, 0, -0.174533],
+                position: [0.25, 0, 0.25],
+                rotation: [0, 0, 10],
+                
             },
             RLegBR: {
-                rotation: [0, 0, -0.174533],
+                position: [-0.25, 0, -0.25],
+                rotation: [0, 0, 10],
+                
             },
             RLegBL: {
-                rotation: [0, 0, 0.174533],
+                position: [-0.25, 0, 0.25],
+                rotation: [0, 0, -10],
+                
             },
-        },
+        }
     ],
 };
