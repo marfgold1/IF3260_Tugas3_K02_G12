@@ -53,13 +53,13 @@ globalThis.app = {
     renderer: webgl,
     updateRig: (rigId) => {
         if (app.rig)
-            document.getElementById(`insp-compTree-${app.rig.id}`)?.classList.remove("selected");
+            componentTree.getEl(app.rig.id)?.classList.remove("selected");
         if (!(rigId in app.model.rigs) || rigId === app.rig?.id) {
             app.rig = null;
             inspector.hide("componentController");
         } else {
             app.rig = app.model.rigs[rigId];
-            document.getElementById(`insp-compTree-${app.rig.id}`).classList.add("selected");
+            componentTree.getEl(app.rig.id).classList.add("selected");
             inspector.show("componentController");
             inspectorItems.componentController.setState({
                 name: rigId,

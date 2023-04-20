@@ -275,6 +275,10 @@ export class InspectorSection {
         t.appendChild(inp);
         return [it, inp];
     }
+
+    getEl(name) {
+        return document.getElementById(`insp-${this.#name}-${name}`);
+    }
 }
 
 export class Inspector {
@@ -343,6 +347,10 @@ export class Inspector {
         if (!this.#currentSect.has(inspName)) return;
         this.#currentSect.delete(inspName);
         this.#sections[inspName].toggle(false);
+    }
+
+    static getEl(section, name) {
+        return document.getElementById(`insp-${section}-${name}`);
     }
 }
 

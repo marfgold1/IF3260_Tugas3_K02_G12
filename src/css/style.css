@@ -24,8 +24,9 @@ html, body {
     min-width: 60px;
 }
 
-input {
-    font-weight: bold;
+label, td, th {
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 input[type="submit"] {

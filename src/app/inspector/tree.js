@@ -25,6 +25,7 @@ const updateComponentTree = (rigs) => {
         "Component Tree",
         createComponentButton(rigs),
     );
+    globalThis.componentTree = componentTree;
     inspector.register(componentTree);
     inspector.show("compTree");
     inspector.order("compTree", 0);
