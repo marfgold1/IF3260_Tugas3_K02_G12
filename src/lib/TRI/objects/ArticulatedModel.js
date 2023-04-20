@@ -5,7 +5,7 @@ import { Rig } from "./Rig.js";
 /** @typedef {{ options: { [k: string]: any }, children: {[k: string]: ModelDefinition} }} ModelDefinition */
 
 export class ArticulatedModel extends Object3D {
-    /** @type {{string: Rig}} */
+    /** @type {{[k: string]: Rig}} */
     #rigs={}
 
     /**

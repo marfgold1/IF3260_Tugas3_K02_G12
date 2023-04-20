@@ -26,7 +26,18 @@ html, body {
 
 input {
     font-weight: bold;
-    font-size: large;
+}
+
+input[type="submit"] {
+    border: 1px solid #646464;
+    border-radius: 4px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"].selected {
+    color: white;
+    background-color: #646464;
 }
 
 body {
