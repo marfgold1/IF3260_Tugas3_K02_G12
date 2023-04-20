@@ -5,7 +5,7 @@ import model from "./model.js";
 import { inspector, inspectorItems, inspectorItems as state } from "./inspector.js";
 import { cameraCreator } from "./cameras.js";
 import ComponentTree from "./inspector/tree.js";
-import animationDef from "./models/foxAnimation.js";
+import foxAnim from "./models/foxAnimation.js";
 import { DEG2RAD } from "../lib/TRI/math/index.js";
 
 const v = new TRI.Vector3();
@@ -31,6 +31,7 @@ scene.add(model);
 ComponentTree.update(model.rigsTree);
 
 const animation = {
+    def : foxAnim,
     isPlaying: false,
     isReverse: false,
     isLoop: false,
@@ -83,7 +84,7 @@ function render(ts) {
     let curFrame = animation.curFrame;
     if (animation.isPlaying) {
         dt += (ts - lt) / tf;
-        const frame = animationDef['frames'][curFrame];
+        const frame = animation.def['frames'][curFrame];
         Object.keys(frame).forEach((rigId) => {
             const rigFrame = frame[rigId];
             const rig = app.model.rigs[rigId.substring(1)];
@@ -105,7 +106,7 @@ function render(ts) {
         if (animation.isReverse){
             // Frame 9 -> 8 -> 7 -> ... -> 0
             if (dt > 0.95) {
-                animation.curFrame = (curFrame - 1 + animationDef['frames'].length) % animationDef['frames'].length;
+                animation.curFrame = (curFrame - 1 + animation.def['frames'].length) % animation.def['frames'].length;
                 dt = 0;
             }
             if (!animation.curFrame && !animation.isLoop) {
@@ -116,10 +117,10 @@ function render(ts) {
         } else {
             // Frame 0 -> 1 -> 2 -> 3 -> 4 -> ... -> 9
             if (dt > 0.95) {
-                animation.curFrame = (curFrame + 1) % animationDef['frames'].length;
+                animation.curFrame = (curFrame + 1) % animation.def['frames'].length;
                 dt = 0;
             }
-            if (animation.curFrame === animationDef['frames'].length - 1 && !animation.isLoop) {
+            if (animation.curFrame === animation.def['frames'].length - 1 && !animation.isLoop) {
                 animation.isPlaying = false;
             } else {
                 animation.isPlaying = true;
