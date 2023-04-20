@@ -5,6 +5,8 @@ import model from "./model.js";
 import { inspector, inspectorItems, inspectorItems as state } from "./inspector.js";
 import { cameraCreator } from "./cameras.js";
 import ComponentTree from "./inspector/tree.js";
+import animationDef from "./models/foxAnimation.js";
+import { DEG2RAD } from "../lib/TRI/math/index.js";
 
 const canvas = document.querySelector('#glcanvas');
 
@@ -42,6 +44,7 @@ const controls = {
 globalThis.app = {
     cameras,
     model,
+    curFrame: 0,
     animation,
     camera,
     rig: null,
@@ -67,20 +70,37 @@ globalThis.app = {
 }
 
 // Setup mutable states (from inspector)
-const tf = 1000 / 60;
+let fps = 60;
+let tf = 1000 / fps;
 let dt = 0, lt = 0;
 function render(ts) {
     controls[inspectorItems.camera.state.mode].update();
     webgl.render(scene, app.camera);
     dt = (ts - lt) / tf;
     lt = ts;
+    let curFrame = app.curFrame;
     if (animation.isPlaying) {
+        Object.keys(animationDef['frames'][curFrame]).forEach((rigId) => {
+            const frame = animationDef['frames'][curFrame];
+            const rig = app.model.rigs[rigId.substring(1)];
+            rig.position.x = frame[rigId].position[0];
+            rig.position.y = frame[rigId].position[1];
+            rig.position.z = frame[rigId].position[2];
+            rig.rotation.x = frame[rigId].rotation[0] * DEG2RAD;
+            rig.rotation.y = frame[rigId].rotation[1] * DEG2RAD;
+            rig.rotation.z = frame[rigId].rotation[2] * DEG2RAD;
+        });
         if (animation.isReverse){
             // Frame 9 -> 8 -> 7 -> ... -> 0
+            if (dt > 0.95) {
+                app.curFrame = (curFrame - 1 + animationDef['frames'].length) % animationDef['frames'].length;
+            }
         } else {
             // Frame 0 -> 1 -> 2 -> 3 -> 4 -> ... -> 9
+            if (dt > 0.95) {
+                app.curFrame = (curFrame + 1) % animationDef['frames'].length;
+            }
         }
-
     }
     requestAnimationFrame(render);
 }
