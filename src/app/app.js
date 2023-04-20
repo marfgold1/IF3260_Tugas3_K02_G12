@@ -33,6 +33,9 @@ ComponentTree.update(model.rigsTree);
 const animation = {
     isPlaying: false,
     isReverse: false,
+    isLoop: false,
+    curFrame: 0,
+    fps: 10,
 }
 
 const controls = {
@@ -45,7 +48,6 @@ const controls = {
 globalThis.app = {
     cameras,
     model,
-    curFrame: 0,
     scene,
     animation,
     camera,
@@ -72,20 +74,23 @@ globalThis.app = {
 }
 
 // Setup mutable states (from inspector)
-let fps = 1;
-let tf = 1000 / fps;
 let dt = 0, lt = 0;
 function render(ts) {
+    let tf = 1000 / animation.fps;
     controls[inspectorItems.camera.state.mode].update();
     webgl.render(scene, app.camera);
     if (!ts) ts = 0;
-    let curFrame = app.curFrame;
+    let curFrame = animation.curFrame;
     if (animation.isPlaying) {
         dt += (ts - lt) / tf;
         const frame = animationDef['frames'][curFrame];
         Object.keys(frame).forEach((rigId) => {
             const rigFrame = frame[rigId];
             const rig = app.model.rigs[rigId.substring(1)];
+            if (!rig) {
+                console.error(`Rig ${rigId} not found`);
+                return;
+            }
             if (rigFrame.position)
                 rig.position.set(...frame[rigId].position);
             if (rigFrame.rotation)
@@ -100,14 +105,24 @@ function render(ts) {
         if (animation.isReverse){
             // Frame 9 -> 8 -> 7 -> ... -> 0
             if (dt > 0.95) {
-                app.curFrame = (curFrame - 1 + animationDef['frames'].length) % animationDef['frames'].length;
+                animation.curFrame = (curFrame - 1 + animationDef['frames'].length) % animationDef['frames'].length;
                 dt = 0;
+            }
+            if (!animation.curFrame && !animation.isLoop) {
+                animation.isPlaying = false;
+            } else {
+                animation.isPlaying = true;
             }
         } else {
             // Frame 0 -> 1 -> 2 -> 3 -> 4 -> ... -> 9
             if (dt > 0.95) {
-                app.curFrame = (curFrame + 1) % animationDef['frames'].length;
+                animation.curFrame = (curFrame + 1) % animationDef['frames'].length;
                 dt = 0;
+            }
+            if (animation.curFrame === animationDef['frames'].length - 1 && !animation.isLoop) {
+                animation.isPlaying = false;
+            } else {
+                animation.isPlaying = true;
             }
         }
     }

@@ -25,8 +25,20 @@ const scene = new InspectorSection("scene", "Scene", {
 const animation = new InspectorSection("animation", "Animation", {
     play: state.button("Toggle Play", () => {
         app.animation.isPlaying = !app.animation.isPlaying;
+        console.log('isPlaying', app.animation.isPlaying);
+        console.log('isReverse', app.animation.isReverse);
+        console.log('isLoop', app.animation.isLoop);
+        console.log('curFrame', app.animation.curFrame);
+
     }),
-    speed: state.range(0.2, null, { min: 0.1, max: 2, step: 0.1 }),
+    fps: state.range(10,
+        (v) => {
+            app.animation.fps = v;
+        },
+        { min: 0, max: 60, step: 1 }),
+    loop: state.toggle(false, () => {
+        app.animation.isLoop = !app.animation.isLoop;
+    }),
     reverse: state.toggle(false, () => {
         app.animation.isReverse = !app.animation.isReverse;
     })
