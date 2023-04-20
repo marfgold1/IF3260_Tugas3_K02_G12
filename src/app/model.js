@@ -1,10 +1,7 @@
 import TRI from "../lib/TRI/TRI.js";
+import modelDef from "./models/golem.js";
 
-const mat = new TRI.PhongMaterial();
-const geom = new TRI.BufferGeometry();
-const mesh = new TRI.Mesh(geom, mat);
+const model = TRI.ArticulatedModel.fromModelDefinition(modelDef);
+model.scale.mul(20);
 
-export default {
-    mesh,
-    geometry: geom,
-};
+export default model;

@@ -28,7 +28,7 @@ const light = new InspectorSection("light", "Light", {
 });
 
 export default {
-    basicMat,
-    phongMat,
-    light,
+    // basicMat,
+    // phongMat,
+    // light,
 }

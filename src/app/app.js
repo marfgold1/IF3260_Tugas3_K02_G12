@@ -1,7 +1,7 @@
 import TRI from "../lib/TRI/TRI.js";
-import model1 from "./models/generator.js";
 
 import { tools } from "./toolbar.js";
+import model from "./model.js";
 import { inspector, inspectorItems, inspectorItems as state } from "./inspector.js";
 import { cameraCreator } from "./cameras.js";
 
@@ -23,16 +23,6 @@ webgl.addEventListener('resize', (ev) => {
 });
 
 const scene = new TRI.Scene();
-const modelg = model1;
-const modelm = new TRI.PhongMaterial({
-    lightPosition: new TRI.Vector3(0.5, 0.5, 1),
-    shininess: 80,
-});
-modelm.ambientColor.set(1, 0.2, 0.2);
-const model = new TRI.Mesh(
-    modelg,
-    modelm,
-)
 scene.add(model);
 
 const anim = inspectorItems.animation.state;
@@ -53,28 +43,10 @@ globalThis.app = {
     model,
     animation,
     camera,
-    materials: {
-        basic: new TRI.BasicMaterial(),
-        phong: modelm,
-    },
     renderer: webgl,
-    light: {
-        color: modelm.ambientColor,
-        direction: modelm.lightPosition,
-    },
 }
 
 // Setup mutable states (from inspector)
-modelm.lightPosition.onChange = (v) => {
-    v = v.target;
-    inspectorItems.light.setState({
-        direction: {
-            x: v.x,
-            y: v.y,
-            z: v.z,
-        },
-    }, false);
-}
 model.position.onChange = (v) => {
     v = v.target;
     inspectorItems.model.setState({
@@ -105,20 +77,6 @@ model.scale.onChange = (v) => {
         },
     }, false);
 }
-// cameras.perspective.cam.parent.rotation.onChange = (v) => {
-//     v = v.target;
-//     inspectorItems.camera.setState({
-//         rotationX: v.x,
-//         rotationY: v.y,
-//         rotationZ: v.z,
-//     }, false);
-// }
-inspectorItems.scene.setState({
-    background: webgl.clearColor.hex,
-});
-inspectorItems.light.setState({
-    color: modelm.ambientColor.hex,
-});
 
 const tf = 1000 / 60;
 let dt = 0, lt = 0;
