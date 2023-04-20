@@ -9,7 +9,9 @@ Pada tugas ini, kelompok kami telah membuat sebuah program 3D menggunakan WebGL 
 3. Pastikan canvas berhasil muncul pada halaman web dengan baik.
 
 ## Kelompok 15 Kelas 02
-1. 13519182 Farrell Abieza Zidan
-2. 13520066 Putri Nurhaliza
-3. 13520089 Nayotama Pradipta
-4. 13520103 Amar Fadil 
+| NIM | Nama | Object Model |
+| --- | -----| ----- | 
+| 13519182 |Farrel Abieza Zidan| Creeper |
+| 13520066 |Putri Nurhaliza| Fox |
+| 13520089 |Nayotama Pradipta| Squid |
+| 13520103 |Amar Fadil| Golem |
