@@ -307,6 +307,14 @@ export class Vector3 extends EventDispatcher {
         return arr;
     }
 
+    toDict() {
+        return {
+            x: this.x,
+            y: this.y,
+            z: this.z
+        };
+    }
+
     /**
      * Check if vector is equal.
      *

@@ -4,6 +4,7 @@ import { tools } from "./toolbar.js";
 import model from "./model.js";
 import { inspector, inspectorItems, inspectorItems as state } from "./inspector.js";
 import { cameraCreator } from "./cameras.js";
+import ComponentTree from "./inspector/tree.js";
 
 const canvas = document.querySelector('#glcanvas');
 
@@ -24,8 +25,8 @@ webgl.addEventListener('resize', (ev) => {
 
 const scene = new TRI.Scene();
 scene.add(model);
+ComponentTree.update(model.rigsTree);
 
-const anim = inspectorItems.animation.state;
 const animation = {
     isPlaying: false,
     isReverse: false,
@@ -43,41 +44,29 @@ globalThis.app = {
     model,
     animation,
     camera,
+    rig: null,
     renderer: webgl,
+    updateRig: (rigId) => {
+        if (app.rig)
+            document.getElementById(`insp-compTree-${app.rig.id}`).classList.remove("selected");
+        if (!(rigId in app.model.rigs) || rigId === app.rig?.id) {
+            app.rig = null;
+            inspector.hide("componentController");
+        } else {
+            app.rig = app.model.rigs[rigId];
+            document.getElementById(`insp-compTree-${app.rig.id}`).classList.add("selected");
+            inspector.show("componentController");
+            inspectorItems.componentController.setState({
+                name: rigId,
+                position: app.rig.position.toDict(),
+                rotation: app.rig.rotation.toDict(),
+                scale: app.rig.scale.toDict(),
+            });
+        }
+    }
 }
 
 // Setup mutable states (from inspector)
-model.position.onChange = (v) => {
-    v = v.target;
-    inspectorItems.model.setState({
-        pos: {
-            x: v.x,
-            y: v.y,
-            z: v.z,
-        },
-    }, false);
-}
-model.rotation.onChange = (v) => {
-    v = v.target;
-    inspectorItems.model.setState({
-        rot: {
-            x: v.x,
-            y: v.y,
-            z: v.z,
-        },
-    }, false);
-}
-model.scale.onChange = (v) => {
-    v = v.target;
-    inspectorItems.model.setState({
-        scale: {
-            x: v.x,
-            y: v.y,
-            z: v.z,
-        },
-    }, false);
-}
-
 const tf = 1000 / 60;
 let dt = 0, lt = 0;
 function render(ts) {
@@ -86,7 +75,7 @@ function render(ts) {
     dt = (ts - lt) / tf;
     lt = ts;
     if (animation.isPlaying) {
-        if (!app.animation.isReverse){
+        if (animation.isReverse){
             // Frame 9 -> 8 -> 7 -> ... -> 0
         } else {
             // Frame 0 -> 1 -> 2 -> 3 -> 4 -> ... -> 9

@@ -1,43 +1,35 @@
 import { InspectorSection, state } from "../../lib/Inspector.js";
 
-const createComponentButton = (node, depth = 0) => {
-    const buttons = [];
-    const button = state.button(node.name, () => {
-        console.log(node.name);
-    }, `margin-left: ${depth * 20}px;`);
+const createComponentButton = (rigs, depth = 0) => {
+    let buttons = {};
 
-    // button.style.marginLeft = `${depth * 20}px`;
-
-    buttons.push(button);
-  
-    for (const child of node.children || []) {
-        const childButton = createComponentButton(child, depth + 1);
-        buttons.push(...childButton);
-    }
-  
+    Object.keys(rigs).forEach((rigId) => {
+        const rig = rigs[rigId];
+        buttons[rigId] = state.button(rigId, () => {
+            app.updateRig(rigId);
+        }, `margin-left: ${depth * 20}px;`);
+        buttons = {
+            ...buttons,
+            ...createComponentButton(rig.children, depth + 1),
+        }
+    });
     return buttons;
 };
 
-const model = {
-    name: "Body",
-    children: [
-        {
-            name: "Head",
-        },
-        {
-            name: "Left Arm",
-        },
-        {
-            name: "Right Arm",
-        },
-    ]
-}
-
-
-const componentTree = new InspectorSection("componentTree", "Component Tree", {
-    ...createComponentButton(model),
-});
+let componentTree = null;
+const updateComponentTree = (rigs) => {
+    const buttons = {};
+    if (componentTree) inspector.unregister(componentTree);
+    componentTree = new InspectorSection(
+        "compTree",
+        "Component Tree",
+        createComponentButton(rigs),
+    );
+    inspector.register(componentTree);
+    inspector.show("compTree");
+    inspector.order("compTree", 0);
+};
 
 export default {
-    componentTree,
+    update: updateComponentTree,
 };

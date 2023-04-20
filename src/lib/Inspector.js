@@ -296,6 +296,24 @@ export class Inspector {
         this.#mainEl.appendChild(inspector.bodyEl);
     }
 
+    unregister(inspector) {
+        if (inspector.name in this.#sections) {
+            delete this.#sections[inspector.name];
+            this.#currentSect.delete(inspector.name);
+            this.#mainEl.removeChild(inspector.bodyEl);
+        }
+    }
+
+    order(inspName, order=0) {
+        if (!(inspName in this.#sections)) return;
+        const insp = this.#sections[inspName].bodyEl;
+        this.#mainEl.removeChild(insp);
+        if(order >= this.#mainEl.children.length)
+            this.#mainEl.appendChild(insp);
+        else
+            this.#mainEl.insertBefore(insp, this.#mainEl.children[order]);
+    }
+
     toggle(inspName) {
         if (this.#currentSect.has(inspName)) this.hide(inspName);
         else this.show(inspName);
@@ -345,7 +363,6 @@ export const state = {
         }
     },
     button: (title=null, onClick=null, style="") => {
-        console.log("button", title, style);
         return {
             ...state.input(null, "submit", onClick, {}, style),
             title,
