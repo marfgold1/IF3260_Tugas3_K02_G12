@@ -9,7 +9,7 @@ const componentController = new InspectorSection("componentController", "Compone
     }, {}),
     rotation: state.vector3("Rotation", (i, v) => {
         app.rig.rotation[i] = v * DEG2RAD;
-    }, {}, {step: 0.05}),
+    }, {}, {step: 1}),
     scale: state.vector3("Scale", (i, v) => {
         app.rig.scale[i] = v;
     }, {x: 1, y: 1, z: 1}, {step: 0.1}),
