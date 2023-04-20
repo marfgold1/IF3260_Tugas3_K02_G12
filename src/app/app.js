@@ -5,7 +5,7 @@ import model from "./model.js";
 import { inspector, inspectorItems, inspectorItems as state } from "./inspector.js";
 import { cameraCreator } from "./cameras.js";
 import ComponentTree from "./inspector/tree.js";
-import foxAnim from "./models/foxAnimation.js";
+import foxAnim from "./models/golemanimation.js";
 import { DEG2RAD } from "../lib/TRI/math/index.js";
 
 const v = new TRI.Vector3();
@@ -46,10 +46,14 @@ ComponentTree.update(model.tree);
 const animation = {
     def : foxAnim,
     isPlaying: false,
-    isReverse: false,
-    isLoop: false,
-    curFrame: 0,
-    fps: 10,
+    load: (data) => {
+        animation.def = data;
+        animation.isPlaying = false;
+        inspectorItems.animation.setState({
+            currentFrame: 0,
+            fps: 10,
+        })
+    }
 }
 
 const controls = {
@@ -125,14 +129,17 @@ globalThis.app = {
     }
 }
 
+const animInsp = inspectorItems.animation;
+const anim = animInsp.state;
+
 // Setup mutable states (from inspector)
 let dt = 0, lt = 0;
 function render(ts) {
-    let tf = 1000 / animation.fps;
+    let tf = 1000 / anim.fps;
     controls[inspectorItems.camera.state.mode].update();
     webgl.render(scene, app.camera);
     if (!ts) ts = 0;
-    let curFrame = animation.curFrame;
+    let curFrame = anim.currentFrame;
     if (animation.isPlaying) {
         dt += (ts - lt) / tf;
         const frame = animation.def['frames'][curFrame];
@@ -144,23 +151,28 @@ function render(ts) {
                 return;
             }
             if (rigFrame.position)
-                rig.position.set(...frame[rigId].position);
+                rig.position.set(...rigFrame.position);
             if (rigFrame.rotation)
-                rig.rotation.set(...frame[rigId].rotation.map((v) => v * DEG2RAD));
+                rig.rotation.set(...rigFrame.rotation.map((v) => v * DEG2RAD));
+            if (rigFrame.scale)
+                rig.scale.set(...rigFrame.scale);
             if (app.comp?.id === rigId.substring(1)) {
                 inspectorItems.componentController.setState({
                     position: rig.position.toDict(),
                     rotation: v.set(...rig.rotation).mul(TRI.RAD2DEG).toDict(),
+                    scale: rig.scale.toDict(),
                 });
             }
         });
-        if (animation.isReverse){
+        if (anim.reverse){
             // Frame 9 -> 8 -> 7 -> ... -> 0
             if (dt > 0.95) {
-                animation.curFrame = (curFrame - 1 + animation.def['frames'].length) % animation.def['frames'].length;
+                animInsp.setState({
+                    currentFrame: (curFrame - 1 + animation.def['frames'].length) % animation.def['frames'].length,
+                })
                 dt = 0;
             }
-            if (!animation.curFrame && !animation.isLoop) {
+            if (!anim.currentFrame && !anim.loop) {
                 animation.isPlaying = false;
             } else {
                 animation.isPlaying = true;
@@ -168,10 +180,12 @@ function render(ts) {
         } else {
             // Frame 0 -> 1 -> 2 -> 3 -> 4 -> ... -> 9
             if (dt > 0.95) {
-                animation.curFrame = (curFrame + 1) % animation.def['frames'].length;
+                animInsp.setState({
+                    currentFrame: (curFrame + 1) % animation.def['frames'].length,
+                });
                 dt = 0;
             }
-            if (animation.curFrame === animation.def['frames'].length - 1 && !animation.isLoop) {
+            if (anim.currentFrame === animation.def['frames'].length - 1 && !anim.loop) {
                 animation.isPlaying = false;
             } else {
                 animation.isPlaying = true;

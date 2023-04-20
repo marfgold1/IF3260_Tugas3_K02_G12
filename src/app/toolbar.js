@@ -6,7 +6,7 @@ export const tools = new Toolbar(document.getElementById("toolbar"));
 
 export const toolitem = {
     file: new ToolItem("file", {
-        onToggle() { insp.toggle("import"); insp.toggle("export"); },
+        onToggle() { insp.toggle("import"); insp.toggle("export"); insp.toggle("animImport"); insp.toggle("animExport"); },
     }),
 }
 Object.keys(toolitem).forEach((v) => { tools.add(toolitem[v]); });

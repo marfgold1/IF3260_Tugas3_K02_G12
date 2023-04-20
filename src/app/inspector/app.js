@@ -19,17 +19,14 @@ const animation = new InspectorSection("animation", "Animation", {
     play: state.button("Toggle Play", () => {
         app.animation.isPlaying = !app.animation.isPlaying;
     }),
+    currentFrame: state.number(0, null, {disabled: true}),
     fps: state.range(10,
         (v) => {
             app.animation.fps = v;
         },
         { min: 0, max: 60, step: 1 }),
-    loop: state.toggle(false, () => {
-        app.animation.isLoop = !app.animation.isLoop;
-    }),
-    reverse: state.toggle(false, () => {
-        app.animation.isReverse = !app.animation.isReverse;
-    })
+    loop: state.toggle(false),
+    reverse: state.toggle(false),
 });
 
 export default {
