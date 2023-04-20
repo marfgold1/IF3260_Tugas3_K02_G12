@@ -5,15 +5,6 @@ import phongFrag from "./shaders/phong.frag.js";
 import phongVert from "./shaders/phong.vert.js";
 
 export class PhongMaterial extends ShaderMaterial {
-    /** @type {Color} */
-    #ambientColor
-    /** @type {Color} */
-    #diffuseColor
-    /** @type {Color} */
-    #specularColor
-    /** @type {Vector3} */
-    #lightPosition
-
     /**
      * Creates an instance of PhongMaterial.
      * @param {{name: string, ambientColor: Color, diffuseColor: Color, specularColor: Color, shininess: number, lightPosition: Vector3}} options
@@ -30,33 +21,33 @@ export class PhongMaterial extends ShaderMaterial {
                 diffuseColor: diffuseColor || Color.white(),
                 specularColor: specularColor || Color.white(),
                 shininess: shininess || 1,
-                lightPosition: lightPosition || new Vector3(0, 0, 1),
+                lightPosition: lightPosition || new Vector3(5, 0, 5),
             },
         });
-        this.#ambientColor = this.uniforms['ambientColor'];
-        this.#diffuseColor = this.uniforms['diffuseColor'];
-        this.#specularColor = this.uniforms['specularColor'];
-        this.#lightPosition = this.uniforms['lightPosition'];
     }
 
     get id() {
         return "Phong";
     }
 
+    /** @type {Color} */
     get ambientColor() {
-        return this.#ambientColor;
+        return this.uniforms['ambientColor'];
     }
 
+    /** @type {Color} */
     get diffuseColor() {
-        return this.#diffuseColor;
+        return this.uniforms['diffuseColor'];
     }
 
+    /** @type {Color} */
     get specularColor() {
-        return this.#specularColor;
+        return this.uniforms['specularColor'];
     }
 
+    /** @type {Vector3} */
     get lightPosition() {
-        return this.#lightPosition;
+        return this.uniforms['lightPosition'];
     }
 
     /** @type {number} */
@@ -70,5 +61,19 @@ export class PhongMaterial extends ShaderMaterial {
 
     get type() {
         return 'PhongMaterial';
+    }
+
+    toJSON() {
+        const { vertexShader, fragmentShader, ...other } = super.toJSON();
+        return {
+            ...other,
+            type: this.type,
+        };
+    }
+
+    static fromJSON(json) {
+        const obj = new PhongMaterial(json);
+        ShaderMaterial.fromJSON(json, obj);
+        return obj;
     }
 }

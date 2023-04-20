@@ -1,3 +1,6 @@
+import { Color } from "../core/index.js";
+import { Vector3 } from "../math/index.js";
+
 export class ShaderMaterial {
     static #idCounter = 0;
 
@@ -45,17 +48,42 @@ export class ShaderMaterial {
     }
 
     toJSON() {
+        const uniformsData = {};
+        for (const key in this.uniforms) {
+            const uniform = this.uniforms[key];
+            if (uniform instanceof Color) {
+                uniformsData[key] = ['Color', uniform.toJSON()];
+            } else if (uniform instanceof Vector3) {
+                uniformsData[key] = ['Vector3', uniform.toJSON()];
+            } else {
+                uniformsData[key] = uniform;
+            }
+        }
         return {
             name: this.name,
             vertexShader: this.vertexShader,
             fragmentShader: this.fragmentShader,
-            uniforms: this.uniforms,
+            uniforms: uniformsData,
             type: this.type,
         };
     }
 
-    static fromJSON(json) {
-        return new ShaderMaterial(json);
+    static fromJSON(json, obj=null) {
+        const uniforms = {};
+        for (const key in json.uniforms) {
+            const uniform = json.uniforms[key];
+            if (uniform[0] == 'Color') {
+                uniforms[key] = Color.fromJSON(uniform[1]);
+            } else if (uniform[0] == 'Vector3') {
+                uniforms[key] = Vector3.fromJSON(uniform[1]);
+            } else {
+                uniforms[key] = uniform;
+            }
+        }
+        json.uniforms = uniforms;
+        if (!obj) obj = new ShaderMaterial(json);
+        else obj.#uniforms = json.uniforms;
+        return obj;
     }
 
     equals(material) {

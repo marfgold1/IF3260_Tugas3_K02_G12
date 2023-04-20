@@ -325,7 +325,7 @@ export class Quaternion extends EventDispatcher {
      * @return {Vector3} Euler angles.
      * @memberof Quaternion
      */
-    toEuler(v=null, update=true) {
+    toEuler(v=null) {
         const {x, y, z, w} = this;
         const sqw = w * w;
         const sqx = x * x;
@@ -402,6 +402,14 @@ export class Quaternion extends EventDispatcher {
      */
     static fromAxisAngle(v, a) {
         return new Quaternion().setAxisAngle(v, a);
+    }
+
+    toJSON() {
+        return [ ...this ];
+    }
+
+    static fromJSON(json, obj=null) {
+        return (obj || new Quaternion()).set(...json);
     }
 
     *[Symbol.iterator]() {

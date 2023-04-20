@@ -284,7 +284,7 @@ export class WebGL extends EventDispatcher {
     #renderObject(object, uniforms) {
         if (!object.visible) return;
         object.updateWorldMatrix(false, true);
-        if (object instanceof Mesh) {
+        if (object instanceof Mesh && object.geometry.attributes.position) {
             /** @type {ShaderMaterial} */
             const material = object.material;
             /** @type {ProgramInfo} */

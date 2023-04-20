@@ -53,4 +53,27 @@ export class BufferGeometry {
         }
         this.setAttribute('normal', normal);
     }
+
+    get type() {
+        return "BufferGeometry";
+    }
+
+    toJSON() {
+        const data = {
+            type: this.type,
+            attributes: {}
+        };
+        for (const name in this.#attributes) {
+            if (name === 'normal') continue;
+            data.attributes[name] = this.#attributes[name].toJSON();
+        }
+        return data;
+    }
+
+    static fromJSON(data, geometry=null) {
+        if(!geometry) geometry = new BufferGeometry();
+        for (const name in data.attributes)
+            geometry.setAttribute(name, BufferAttribute.fromJSON(data.attributes[name]));
+        return geometry;
+    }
 }

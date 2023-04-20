@@ -158,10 +158,17 @@ export class Color {
     }
 
     toJSON() {
-        return { r: this.r, g: this.g, b: this.b, a: this.a };
+        return [ ...this ];
     }
 
     static fromJSON(obj) {
-        return new Color(obj.r, obj.g, obj.b, obj.a);
+        return new Color(...obj);
+    }
+
+    *[Symbol.iterator]() {
+        yield this.r;
+        yield this.g;
+        yield this.b;
+        yield this.a;
     }
 }

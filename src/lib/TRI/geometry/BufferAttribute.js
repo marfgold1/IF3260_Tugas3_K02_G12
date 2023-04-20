@@ -84,4 +84,27 @@ export class BufferAttribute {
         }
         return data;
     }
+
+    get type() {
+        return "BufferAttribute";
+    }
+
+    toJSON() {
+        const opts = {};
+        if (this.dtype !== WebGLType.FLOAT) opts.dtype = this.dtype;
+        if (this.normalize) opts.normalize = this.normalize;
+        if (this.stride) opts.stride = this.stride;
+        if (this.offset) opts.offset = this.offset;
+        return {
+            type: this.type,
+            data: Array.from(this.data),
+            size: this.size,
+            options: opts,
+        };
+    }
+
+    static fromJSON(json, obj=null) {
+        if(!obj) obj = new BufferAttribute(new Float32Array(json.data), json.size, json.options);
+        return obj;
+    }
 }

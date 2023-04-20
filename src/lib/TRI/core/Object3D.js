@@ -16,8 +16,6 @@ _zAxis = new Vector3(0, 0, 1);
 const _q1 = new Quaternion();
 
 export class Object3D extends EventDispatcher {
-    /** @type {string} */
-    #id
     /** @type {Vector3} */
     #position
     /** @type {Vector3} */
@@ -39,7 +37,6 @@ export class Object3D extends EventDispatcher {
         super();
         /** @type {string} */
         this.name = '';
-        this.#id = '';
         /** @type {Object3D} */
         this.#parent = null;
         /** @type {Array<Object3D>} */
@@ -69,10 +66,6 @@ export class Object3D extends EventDispatcher {
      */
     get type() {
         return "Object3D";
-    }
-
-    get id() {
-        return this.#id;
     }
 
     /**
@@ -300,5 +293,29 @@ export class Object3D extends EventDispatcher {
 
     rotateZ(angle) {
         this.rotateOnWorldAxis(_zAxis, angle);
+    }
+
+    toJSON() {
+        return {
+            name: this.name,
+            position: this.position.toJSON(),
+            quaternion: this.quaternion.toJSON(),
+            scale: this.scale.toJSON(),
+            type: this.type,
+            children: this.children.map((child) => child.toJSON()),
+        }
+    }
+
+    static fromJSON(json, obj=null) {
+        if (!obj) obj = new Object3D();
+        obj.name = json.name;
+        obj.position.set(...json.position);
+        obj.quaternion.set(...json.quaternion);
+        obj.scale.set(...json.scale);
+
+        json.children.forEach(child => {
+            obj.add(TRI.DeserializeObject(child));
+        });
+        return obj;
     }
 }

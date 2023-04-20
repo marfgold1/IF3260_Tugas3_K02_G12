@@ -66,7 +66,7 @@ export class Vector3 extends EventDispatcher {
      * @return {this} This vector.
      * @memberof Vector3
      */
-    set(x, y, z) {
+    set(x=0, y=0, z=0) {
         this.#x = x;
         this.#y = y;
         this.#z = z;
