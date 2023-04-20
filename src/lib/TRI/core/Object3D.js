@@ -295,6 +295,16 @@ export class Object3D extends EventDispatcher {
         this.rotateOnWorldAxis(_zAxis, angle);
     }
 
+    traverse(onLeaf=null) {
+        const traverse = (obj) => {
+            onLeaf?.(obj);
+            obj.children.forEach((child) => {
+                traverse(child);
+            });
+        }
+        traverse(this);
+    }
+
     toJSON() {
         return {
             name: this.name,

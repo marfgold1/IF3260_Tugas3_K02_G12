@@ -36,4 +36,18 @@ export class BasicMaterial extends ShaderMaterial {
     get type() {
         return 'BasicMaterial';
     }
+
+    toJSON() {
+        const { vertexShader, fragmentShader, ...other } = super.toJSON();
+        return {
+            ...other,
+            type: this.type,
+        };
+    }
+
+    static fromJSON(json) {
+        const obj = new BasicMaterial(json);
+        ShaderMaterial.fromJSON(json, obj);
+        return obj;
+    }
 }

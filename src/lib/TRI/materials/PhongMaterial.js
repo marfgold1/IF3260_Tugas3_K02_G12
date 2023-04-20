@@ -20,8 +20,8 @@ export class PhongMaterial extends ShaderMaterial {
                 ambientColor: ambientColor || Color.white(),
                 diffuseColor: diffuseColor || Color.white(),
                 specularColor: specularColor || Color.white(),
-                shininess: shininess || 1,
-                lightPosition: lightPosition || new Vector3(5, 0, 5),
+                shininess: shininess || 30,
+                lightPosition: lightPosition || new Vector3(400, 400, 300),
             },
         });
     }

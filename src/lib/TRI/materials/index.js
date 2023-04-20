@@ -3,7 +3,7 @@ import { PhongMaterial } from "./PhongMaterial.js";
 import { BasicMaterial } from "./BasicMaterial.js";
 
 const DeserializeMaterial = (json) => {
-    switch (json.type) {
+    switch (json?.type) {
         case "ShaderMaterial":
             return ShaderMaterial.fromJSON(json);
         case "PhongMaterial":

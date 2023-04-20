@@ -28,7 +28,20 @@ webgl.addEventListener('resize', (ev) => {
 
 const scene = new TRI.Scene();
 scene.add(model);
-ComponentTree.update(model.rigsTree);
+const plane = new TRI.Mesh(
+    new TRI.PlaneGeometry(1000, 1000),
+    new TRI.BasicMaterial({ color: TRI.Color.white() })
+);
+plane.position.y = -300;
+plane.scale.z = -1;
+scene.add(plane);
+const light = new TRI.Mesh(
+    new TRI.BoxGeometry(50, 50, 50),
+    new TRI.BasicMaterial({ color: TRI.Color.red() })
+);
+light.position.set(400,400,300);
+scene.add(light);
+ComponentTree.update(model.tree);
 
 const animation = {
     def : foxAnim,
@@ -52,24 +65,62 @@ globalThis.app = {
     scene,
     animation,
     camera,
-    rig: null,
+    tree: null,
+    shading: true,
+    comp: null,
     renderer: webgl,
-    updateRig: (rigId) => {
-        if (app.rig)
-            componentTree.getEl(app.rig.id)?.classList.remove("selected");
-        if (!(rigId in app.model.rigs) || rigId === app.rig?.id) {
-            app.rig = null;
-            inspector.hide("componentController");
+    updateMaterial: (shading=null) => {
+        if (shading === null) shading = app.shading;
+        // update shading
+        app.model.traverse((obj) => {
+            if (obj.type === "Mesh") {
+                obj.material = app.model.materials[obj.name][shading ? 0 : 1];
+            }
+        });
+        app.shading = shading;
+
+        if (app.comp?.type == "Mesh") {
+            inspector.hide("componentBasicMat", "componentPhongMat");
+            const mat = app.comp.material;
+            if (mat instanceof TRI.BasicMaterial) {
+                inspector.show("componentBasicMat");
+                inspectorItems.componentBasicMat.setState({
+                    name: app.comp.name,
+                    color: mat.color.hex,
+                });
+            } else if (mat instanceof TRI.PhongMaterial) {
+                inspector.show("componentPhongMat");
+                inspectorItems.componentPhongMat.setState({
+                    name: app.comp.name,
+                    ambientColor: mat.ambientColor.hex,
+                    diffuseColor: mat.diffuseColor.hex,
+                    specularColor: mat.specularColor.hex,
+                    shininess: mat.shininess,
+                });
+            }
+        }
+    },
+    updateComponent: (comp) => {
+        inspector.hide("componentController", "componentBasicMat", "componentPhongMat");
+        if (app.comp)
+            componentTree.getEl(app.comp.name)?.classList.remove("selected");
+        if (app.comp == comp?.component) {
+            app.comp = null;
         } else {
-            app.rig = app.model.rigs[rigId];
-            componentTree.getEl(app.rig.id).classList.add("selected");
-            inspector.show("componentController");
-            inspectorItems.componentController.setState({
-                name: rigId,
-                position: app.rig.position.toDict(),
-                rotation: v.set(...app.rig.rotation).mul(TRI.RAD2DEG).toDict(),
-                scale: app.rig.scale.toDict(),
-            });
+            comp = comp.component;
+            app.comp = comp;
+            componentTree.getEl(comp.name).classList.add("selected");
+            if (comp.type === "Rig") {
+                inspector.show("componentController");
+                inspectorItems.componentController.setState({
+                    name: comp.name,
+                    position: comp.position.toDict(),
+                    rotation: v.set(...comp.rotation).mul(TRI.RAD2DEG).toDict(),
+                    scale: comp.scale.toDict(),
+                });
+            } else if(comp.type === "Mesh") {
+                app.updateMaterial();
+            }
         }
     }
 }
@@ -96,7 +147,7 @@ function render(ts) {
                 rig.position.set(...frame[rigId].position);
             if (rigFrame.rotation)
                 rig.rotation.set(...frame[rigId].rotation.map((v) => v * DEG2RAD));
-            if (app.rig?.id === rigId.substring(1)) {
+            if (app.comp?.id === rigId.substring(1)) {
                 inspectorItems.componentController.setState({
                     position: rig.position.toDict(),
                     rotation: v.set(...rig.rotation).mul(TRI.RAD2DEG).toDict(),

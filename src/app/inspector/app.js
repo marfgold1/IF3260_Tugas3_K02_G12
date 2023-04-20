@@ -5,14 +5,7 @@ const scene = new InspectorSection("scene", "Scene", {
         app.renderer.clearColor.setHex(v);
     }),
     shading: state.toggle(true, (v) => {
-        inspector.hide("light", "basicMat", "phongMat");
-        if (v) {
-            inspector.show("light", "phongMat");
-            app.model.material = app.materials.phong;
-        } else {
-            inspector.show("basicMat");
-            app.model.material = app.materials.basic;
-        }
+        app.updateMaterial(v);
     }),
     reset: state.button("Reset View", () => {
         inspectorItems.camera.setState({
@@ -25,11 +18,6 @@ const scene = new InspectorSection("scene", "Scene", {
 const animation = new InspectorSection("animation", "Animation", {
     play: state.button("Toggle Play", () => {
         app.animation.isPlaying = !app.animation.isPlaying;
-        console.log('isPlaying', app.animation.isPlaying);
-        console.log('isReverse', app.animation.isReverse);
-        console.log('isLoop', app.animation.isLoop);
-        console.log('curFrame', app.animation.curFrame);
-
     }),
     fps: state.range(10,
         (v) => {

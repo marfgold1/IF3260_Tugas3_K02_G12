@@ -1,4 +1,5 @@
 import { Object3D } from "../core/index.js";
+import { DeserializeMaterial } from "../materials/index.js";
 import { Mesh } from "./Mesh.js";
 import { Rig } from "./Rig.js";
 
@@ -7,6 +8,7 @@ import { Rig } from "./Rig.js";
 export class ArticulatedModel extends Object3D {
     /** @type {{[k: string]: Rig}} */
     #rigs={}
+    #materials={}
 
     /**
      * Add rig to the model.
@@ -47,26 +49,41 @@ export class ArticulatedModel extends Object3D {
         return this.#rigs;
     }
 
-    get rigsTree() {
-        function getRigsTree(childrens) {
-            const rigs = {};
+    get materials() {
+        return this.#materials;
+    }
+
+    get tree() {
+        function getCompTree(childrens) {
+            const comp = {};
             childrens.forEach((child) => {
-                if (child instanceof Rig) {
-                    if (child.id in rigs) throw new Error(`Rig with id ${child.id} already exists in model.`);
-                    rigs[child.id] = {};
-                    rigs[child.id].children = getRigsTree(child.children);
-                    rigs[child.id].rig = child;
+                if (child instanceof Rig || child instanceof Mesh) {
+                    comp[child.name] = {};
+                    comp[child.name].children = getCompTree(child.children);
+                    comp[child.name].component = child;
                 }
             });
-            return rigs;
+            return comp;
         }
-        return getRigsTree(this.children);
+        return getCompTree(this.children);
     }
 
     toJSON() {
-        return { 
-            ...super.toJSON(),
+        const data = super.toJSON();
+        function trimMat(d) {
+            if (d.type === "Mesh") {
+                delete d.material;
+            }
+            d.children.forEach((child) => {
+                trimMat(child);
+            });
+        }
+        trimMat(data);
+
+        return {
+            ...data,
             rigs: Object.keys(this.#rigs),
+            materials: this.#materials,
             type: this.type,
         };
     }
@@ -94,6 +111,20 @@ export class ArticulatedModel extends Object3D {
             if (!(rigId in rigsTemp)) throw new Error(`Rig with id ${rigId} not found in model.`);
             obj.addRig(rigsTemp[rigId]);
         });
+        Object.keys(json.materials).forEach((matName) => {
+            obj.#materials[matName] = json.materials[matName].map(
+                (mat) => DeserializeMaterial(mat)
+            );
+        });
+        function attachMat(d) {
+            if (d.type === "Mesh") {
+                d.material = obj.#materials[d.name][0];
+            }
+            d.children.forEach((child) => {
+                attachMat(child);
+            });
+        }
+        attachMat(obj);
         return obj;
     }
 
@@ -111,9 +142,13 @@ export class ArticulatedModel extends Object3D {
                 child = new Rig(objName.substring(1));
                 model.addRig(child);
             } else if (objName[0] == "P") {
+                model.#materials[objName] = [
+                    new TRI.PhongMaterial(),
+                    new TRI.BasicMaterial(),
+                ];
                 child = new Mesh(
                     new TRI.BoxGeometry(1, 1, 1),
-                    new TRI.PhongMaterial(),
+                    model.#materials[objName][0],
                 );
             } else {
                 throw new Error(`Invalid object name ${objName}`);

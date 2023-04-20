@@ -55,8 +55,9 @@ const modelImport = new InspectorSection("import", "Import", {
         app.model.removeFromParent();
         app.model = TRI.DeserializeObject(data);
         app.scene.add(app.model);
-        ComponentTree.update(app.model.rigsTree);
-        app.updateRig();
+        ComponentTree.update(app.model.tree);
+        app.updateComponent();
+        app.updateMaterial();
     }),
 });
 

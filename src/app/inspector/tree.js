@@ -1,30 +1,29 @@
 import { InspectorSection, state } from "../../lib/Inspector.js";
 
-const createComponentButton = (rigs, depth = 0) => {
+const createComponentButton = (tree, depth = 0) => {
     let buttons = {};
-
-    Object.keys(rigs).forEach((rigId) => {
-        const rig = rigs[rigId];
-        buttons[rigId] = state.button(rigId, () => {
-            app.updateRig(rigId);
+    Object.keys(tree).forEach((compName) => {
+        const comp = tree[compName];
+        buttons[compName] = state.button(compName, () => {
+            app.updateComponent(comp)
         }, `margin-left: ${depth * 20}px;`);
         buttons = {
             ...buttons,
-            ...createComponentButton(rig.children, depth + 1),
+            ...createComponentButton(comp.children, depth + 1),
         }
     });
     return buttons;
 };
 
 let componentTree = null;
-const updateComponentTree = (rigs) => {
-    const buttons = {};
+const updateComponentTree = (tree) => {
     if (componentTree) inspector.unregister(componentTree);
     componentTree = new InspectorSection(
         "compTree",
         "Component Tree",
-        createComponentButton(rigs),
+        createComponentButton(tree),
     );
+    globalThis.tree = tree;
     globalThis.componentTree = componentTree;
     inspector.register(componentTree);
     inspector.show("compTree");
